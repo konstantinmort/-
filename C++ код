@@ -1,0 +1,102 @@
+C++ 
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+struct bus
+{
+	int number;
+	int info;
+	bus *t;
+};
+void add_bus(bus **tot, int number);
+void delete_bus(bus **tot, int number);
+void vivod(bus **tot, int number);
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int number;
+	bus *tot1 = 0;
+	int menu = 0;
+	do
+	{
+		cout << "1.Список" << endl;
+		cout << "2.Добавить автобус" << endl;
+		cout << "3.Удалить автобус" << endl;
+		cout << "4.Выход" << endl;
+
+		cin >> menu;
+		switch (menu)
+		{
+		case 1:
+			vivod(&tot1, number);
+			break;
+		case 2:
+			cout << "Введите номер автобуса" << endl;
+			cin >> number;
+			add_bus(&tot1, number);
+			break;
+		case 3:
+			cout << "Введите номер автобуса" << endl;
+			cin >> number;
+			delete_bus(&tot1, number);
+			break;
+		}
+	} while (menu != 4);
+	return 0;
+}
+void vivod(bus **tot, int number)
+{
+	bus* tv = *tot;
+	while (tv) {
+		cout << "автобус номер" << ' ' << tv->number << ' ' << "стоит на стоянке" << endl;
+		tv = tv->t;
+	}
+}
+void add_bus(bus **tot, int number)
+{
+	bus *tv = new bus;
+	tv->t = 0;
+	tv->number = number;
+	cout << "автобус с номером " << ' ' << tv->number << ' ' << "въехала на стоянку" << endl;
+	tv->info = 0;
+	if (*tot == 0)
+	{
+		*tot = tv;
+	}
+	else
+	{
+		tv->t = *tot;
+		*tot = tv;
+	}
+}
+void delete_bus(bus **tot, int number)
+{
+	bus *tmt = *tot;
+	bus *tmt2 = *tot;
+	bus *tr = 0;
+	while ((tmt != 0) && (tmt->number != number))
+	{
+		tr = tmt;
+		tmt = tmt->t;
+	}
+	if (tmt == 0)
+	{
+		cout << "автобуса с данным номером нет на стоянке" << endl;
+	}
+	else
+	{
+		cout << "автобус с номером" << ' ' << tmt->number << ' ' << "выезжала со стоянки" << ' ' << tmt->info++ << ' ' << "раз" << endl;
+		while (tmt2 != tmt)
+		{
+			tmt2->info++;
+			tmt2 = tmt2->t;
+		}
+		if (tr != 0)
+			tr->t = tmt->t;
+		if (tmt == *tot)
+			*tot = (*tot)->t;
+		delete tmt;
+	}
+}
